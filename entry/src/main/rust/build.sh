@@ -12,7 +12,11 @@ fi
 build_type=$1
 arch_abi=$2
 corrosion_dir="/usr/local/lib/cmake/Corrosion"
-android_ndk="/Users/cyc/Library/Android/sdk/ndk/21.4.7075529"
+android_api_level=30
+android_ndk="$HOME/Library/Android/sdk/ndk/21.4.7075529"
+# for ndk=22.1.7171670, it requires to define the sysroot and pass it to the cmake command below. 
+# This script not work with ndk=23.1.7779620
+# android_sysroot="${android_ndk}/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
 
 working_dir=$PWD
 build_dir="${working_dir}"/.rust/"${build_type}/${arch_abi}"
@@ -32,11 +36,14 @@ mkdir -p "$build_dir"
 mkdir -p "$output_dir"
 
 cd "$build_dir"
+# Add the following option to the command for ndk=22.xxx
+# -DCMAKE_SYSROOT="${android_sysroot}" \
 cmake -DCMAKE_BUILD_TYPE="${build_type}" \
       -DCorrosion_DIR="${corrosion_dir}" \
       -DCMAKE_SYSTEM_NAME=Android \
       -DCMAKE_ANDROID_NDK="${android_ndk}" \
       -DCMAKE_ANDROID_ARCH_ABI="${arch_abi}" \
+      -DCMAKE_SYSTEM_VERSION="${android_api_level}" \
       "${rust_source_root}"
 make
 
