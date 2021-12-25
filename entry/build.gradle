@@ -1,0 +1,73 @@
+apply plugin: 'com.huawei.ohos.hap'
+apply plugin: 'com.huawei.ohos.decctest'
+
+//For instructions on signature configuration, see https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ide_debug_device-0000001053822404#section1112183053510
+ohos {
+    compileSdkVersion 7
+    defaultConfig {
+        compatibleSdkVersion 4
+    }
+    buildTypes {
+        release {
+            proguardOpt {
+                proguardEnabled false
+                rulesFiles 'proguard-rules.pro'
+            }
+        }
+    }
+
+    externalNativeBuild {
+        path "src/main/cpp/CMakeLists.txt"
+        arguments "-v"
+        abiFilters "arm64-v8a"
+        cppFlags "-std=c++14"
+    }
+}
+
+
+// 测试用，现在已经使用下面的循环， 分别针对 Debug 和 Release 构建，创建不同的 task。
+//task buildRustLibrary(type: Exec) {
+//    workingDir "$projectDir"
+//    println "$workingDir"
+//    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+//        commandLine 'cmd', '/c', "$projectDir/src/main/rust/build.bat Debug arm64-v8a"
+//    } else {
+//        commandLine 'bash', '-c', "$projectDir/src/main/rust/build.sh Debug arm64-v8a"
+//    }
+//}
+
+for (build_type in ["Debug", "Release"]) {
+    def taskName = "buildRustLibrary$build_type"
+    task "$taskName"(type: Exec) {
+        workingDir "$projectDir"
+        println "$workingDir"
+        if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+            // TODO: not implemented yet. Help needed to write a build script on windows.
+            commandLine 'cmd', '/c', "$projectDir/src/main/rust/build.bat $build_type arm64-v8a"
+        } else {
+            commandLine 'bash', '-c', "$projectDir/src/main/rust/build.sh $build_type arm64-v8a"
+        }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    // if ((task.name == 'preDebugBuild') || (task.name == 'preReleaseBuild')){
+    //     task.dependsOn 'buildRustLibrary'
+    // }
+
+    // 针对不同的构建类型，创建不同的 task 依赖。
+    if (task.name == 'preDebugBuild') {
+        task.dependsOn 'buildRustLibraryDebug'
+    } else if (task.name == 'preReleaseBuild') {
+        task.dependsOn 'buildRustLibraryRelease'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
+    testImplementation 'junit:junit:4.13.1'
+    ohosTestImplementation 'com.huawei.ohos.testkit:runner:1.0.0.200'
+}
+decc {
+    supportType = ['html', 'xml']
+}
