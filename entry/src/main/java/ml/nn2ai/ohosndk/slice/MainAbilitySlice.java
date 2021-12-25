@@ -30,6 +30,7 @@ public class MainAbilitySlice extends AbilitySlice {
         Text text = new Text(this);
         text.setText(stringFromRust());
         text.setTextColor(Color.RED);
+        text.setTextSize(80);
         myLayout.addComponent(text);
         super.setUIContent(myLayout);
     }

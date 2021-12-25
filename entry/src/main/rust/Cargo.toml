@@ -7,5 +7,6 @@ authors = ["Chen Yunchuan <chenych11@gmail.com>"]
 jni = "0.5.2"
 
 [lib]
-crate_type = ["staticlib", "cdylib"]
+crate_type = ["cdylib"]
+#crate_type = ["staticlib", "cdylib"]
 #crate_type = ["staticlib"]

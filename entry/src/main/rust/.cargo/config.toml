@@ -1,0 +1,2 @@
+[target."aarch64-linux-ohos"]
+linker = "/Users/cyc/Library/Huawei/sdk/native/3.0.0.0/llvm/bin/clang"
