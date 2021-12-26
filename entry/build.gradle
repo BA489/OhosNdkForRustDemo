@@ -39,7 +39,7 @@ for (build_type in ["Debug", "Release"]) {
         if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
             commandLine 'cmd', '/c', "$projectDir/src/main/rust/build.bat", "$ndk_dir", "$build_type", "arm64-v8a"
         } else {
-            commandLine 'bash', '-c', "$projectDir/src/main/rust/build.sh $build_type arm64-v8a"
+            commandLine 'bash', '-c', "$projectDir/src/main/rust/build.sh '$ndk_dir' '$build_type' arm64-v8a"
         }
     }
 }
