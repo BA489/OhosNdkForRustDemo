@@ -23,8 +23,6 @@
     "gcc": [
       "-Wno-error=unused-command-line-argument",
       "--target=aarch64-linux-ohos",
-      "--gcc-toolchain=/Users/cyc/Library/Huawei/sdk/native/3.0.0.0/llvm",
-      "--sysroot=/Users/cyc/Library/Huawei/sdk/native/3.0.0.0/sysroot",
       "-fPIC",
       "-fdata-sections",
       "-ffunction-sections",

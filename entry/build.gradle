@@ -25,25 +25,19 @@ ohos {
 }
 
 
-// 测试用，现在已经使用下面的循环， 分别针对 Debug 和 Release 构建，创建不同的 task。
-//task buildRustLibrary(type: Exec) {
-//    workingDir "$projectDir"
-//    println "$workingDir"
-//    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//        commandLine 'cmd', '/c', "$projectDir/src/main/rust/build.bat Debug arm64-v8a"
-//    } else {
-//        commandLine 'bash', '-c', "$projectDir/src/main/rust/build.sh Debug arm64-v8a"
-//    }
-//}
+Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+def ndk_dir = properties.getProperty("hwndk.dir")
+println "projectDir = $projectDir"
+println "ndk_dir = $ndk_dir"
 
 for (build_type in ["Debug", "Release"]) {
     def taskName = "buildRustLibrary$build_type"
     task "$taskName"(type: Exec) {
         workingDir "$projectDir"
-        println "$workingDir"
         if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-            // TODO: not implemented yet. Help needed to write a build script on windows.
-            commandLine 'cmd', '/c', "$projectDir/src/main/rust/build.bat $build_type arm64-v8a"
+            commandLine 'cmd', '/c', "$projectDir/src/main/rust/build.bat", "$ndk_dir", "$build_type", "arm64-v8a"
         } else {
             commandLine 'bash', '-c', "$projectDir/src/main/rust/build.sh $build_type arm64-v8a"
         }
