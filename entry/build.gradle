@@ -28,7 +28,7 @@ ohos {
 Properties properties = new Properties()
 properties.load(project.rootProject.file("local.properties").newDataInputStream())
 
-def ndk_dir = properties.getProperty("hwndk.dir")
+def ndk_dir = properties.getProperty("hwndk.dir", properties.getProperty("hwsdk.dir") + "/native/3.0.0.0")
 println "projectDir = $projectDir"
 println "ndk_dir = $ndk_dir"
 
