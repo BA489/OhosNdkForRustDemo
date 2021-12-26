@@ -41,7 +41,7 @@ echo "[RustLibBuilder] gcc_toolchain = $gcc_toolchain"
 echo "[RustLibBuilder] sysroot = $sysroot"
 echo "[RustLibBuilder] linker = $linker"
 
-rustflags="-C linker=\"${linker}\" -C link-args=--gcc-toolchain=\"${gcc_toolchain}\" --sysroot=\"${sysroot}\""
+rustflags="-C linker=${linker} -C link-args=--gcc-toolchain=${gcc_toolchain} --sysroot=${sysroot}"
 echo "[RustLibBuilder] CARGO_BUILD_RUSTFLAGS = ${rustflags}"
 
 if [[ "${build_type}" = "Release" ]]; then
