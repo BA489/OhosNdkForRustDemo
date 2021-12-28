@@ -49,7 +49,7 @@ echo [RustLibBuilder] sysroot = %sysroot%
 echo [RustLibBuilder] linker = %linker%
 
 set "CARGO_BUILD_OLD_RUSTFLAGS=%CARGO_BUILD_RUSTFLAGS%"
-set "CARGO_BUILD_RUSTFLAGS=-C linker=%linker% -C link-args=--gcc-toolchain=%gcc_toolchain% --sysroot=%sysroot%"
+set "CARGO_BUILD_RUSTFLAGS=-C linker=%linker% -C link-arg=--gcc-toolchain=%gcc_toolchain% -C link-arg=--sysroot=%sysroot%"
 
 echo [RustLibBuilder] CARGO_BUILD_RUSTFLAGS = %CARGO_BUILD_RUSTFLAGS%
 

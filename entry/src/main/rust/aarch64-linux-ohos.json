@@ -2,7 +2,6 @@
   "arch": "aarch64",
   "data-layout": "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128",
   "default-uwtable": true,
-  "no-default-libraries": false, 
   "dwarf-version": 2,
   "dynamic-linking": true,
   "executables": true,
@@ -49,7 +48,7 @@
   "post-link-args": {
       "gcc": [
         "-Wl,--allow-multiple-definition",
-        "-Wl,--start-group,-lhilog_ndk.z,-lm,--end-group"
+        "-Wl,--start-group,-lhilog_ndk.z,-lm,-lc,--end-group"
       ]
   },
   "supported-sanitizers": [
