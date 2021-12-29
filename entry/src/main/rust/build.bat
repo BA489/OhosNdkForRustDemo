@@ -21,8 +21,8 @@ echo [RustLibBuilder] build_type = %build_type%
 echo [RustLibBuilder] arch_abi = %arch_abi%
 
 set "working_dir=%cd%"
-set "build_dir=%working_dir%/.rust/%arch_abi%"
-set "output_dir=%working_dir%/libs/%arch_abi%"
+set "build_dir=%working_dir%\.rust\%arch_abi%"
+set "output_dir=%working_dir%\libs\%arch_abi%"
 set "rust_source_root=%~dp0"
 
 echo [RustLibBuilder] working_dir = %working_dir%
@@ -30,21 +30,21 @@ echo [RustLibBuilder] build_dir = %build_dir%
 echo [RustLibBuilder] output_dir = %output_dir%
 echo [RustLibBuilder] rust_source_root = %rust_source_root%
 
-set "tool_build_dir=%working_dir%/.rust/host"
-set "tool_output_dir=%working_dir}/bin"
-set "tool_build_script=%rust_source_root%/scripts/make_linker_wrapper.bat"
+set "tool_build_dir=%working_dir%\.rust\host"
+set "tool_output_dir=%working_dir%\bin"
+set "tool_build_script=%rust_source_root%\scripts\make_linker_wrapper.bat"
 
 echo [RustLibBuilder] tool_build_script = %tool_build_script%
 echo [RustLibBuilder] tool_build_dir = %tool_build_dir%
 echo [RustLibBuilder] tool_output_dir = %tool_output_dir%
 
-echo [RustLibBuilder] "Start build linker_wrapper"
+echo [RustLibBuilder] Start build linker_wrapper
 
 if not exist "%tool_output_dir%" (
     mkdir "%tool_output_dir%"
 )
 
-"%tool_build_script%" "%tool_build_dir%" "%tool_output_dir%"
+call "%tool_build_script%" "%tool_build_dir%" "%tool_output_dir%"
 echo [RustLibBuilder] linker_wrapper built succeed.
 
 if not exist "%build_dir%" (
@@ -58,10 +58,10 @@ if not exist "%output_dir%" (
 pushd .
 cd "%rust_source_root%"
 
-set "gcc_toolchain=%ndk_dir%/llvm"
-set "sysroot=%ndk_dir%/sysroot"
-set "linker=%gcc_toolchain%/bin/clang.exe"
-set "linker_wrapper=%tool_output_dir%/linker_wrapper.exe"
+set "gcc_toolchain=%ndk_dir%\llvm"
+set "sysroot=%ndk_dir%\sysroot"
+set "linker=%gcc_toolchain%\bin\clang.exe"
+set "linker_wrapper=%tool_output_dir%\linker_wrapper.exe"
 
 echo [RustLibBuilder] gcc_toolchain = %gcc_toolchain%
 echo [RustLibBuilder] sysroot = %sysroot%

@@ -1,5 +1,7 @@
 @echo off
 
+SETLOCAL
+
 set "target_dir=%1"
 set "output_dir=%2"
 
@@ -18,3 +20,7 @@ echo [RustToolBuilder] tool_src_dir = %tool_src_dir%
 cargo +nightly build -Z unstable-options --release --target-dir "%target_dir%" --out-dir "%output_dir%"
 
 popd
+
+echo [RustToolBuilder] Return to %CD%
+
+ENDLOCAL
