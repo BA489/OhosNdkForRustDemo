@@ -36,28 +36,30 @@ cd "${rust_source_root}"
 gcc_toolchain="${ndk_dir}/llvm"
 sysroot="${ndk_dir}/sysroot"
 linker="${gcc_toolchain}/bin/clang"
+linker_wrapper="${rust_source_root}/scripts/linker_wrapper.sh"
 
 echo "[RustLibBuilder] gcc_toolchain = $gcc_toolchain"
 echo "[RustLibBuilder] sysroot = $sysroot"
 echo "[RustLibBuilder] linker = $linker"
 
-rustflags="-C linker=${linker} -C link-arg=--gcc-toolchain=${gcc_toolchain} -C link-arg=--sysroot=${sysroot}"
+# rustflags="-Z print-link-args -C linker=${linker_wrapper} -C link-arg=--gcc-toolchain=${gcc_toolchain} -C link-arg=--sysroot=${sysroot}"
+rustflags="-C linker=${linker_wrapper} -C link-arg=--gcc-toolchain=${gcc_toolchain} -C link-arg=--sysroot=${sysroot}"
 echo "[RustLibBuilder] CARGO_BUILD_RUSTFLAGS = ${rustflags}"
 
+args=(
+    "+nightly" 
+    "build"
+    "-Z" "unstable-options"
+    "--lib"
+    "--target-dir" "$build_dir"
+    "--out-dir" "$output_dir"
+    "-Zbuild-std=panic_abort,std"
+    "--target" "aarch64-linux-ohos.json"
+)
+
 if [[ "${build_type}" = "Release" ]]; then
-    CARGO_BUILD_RUSTFLAGS="${rustflags}" \
-    cargo +nightly build \
-      -Z unstable-options --release --lib \
-      --target-dir "$build_dir" \
-      --out-dir "$output_dir"   \
-      -Zbuild-std=panic_abort,std \
-      --target aarch64-linux-ohos.json
-else
-    CARGO_BUILD_RUSTFLAGS="${rustflags}" \
-    cargo +nightly build \
-      -Z unstable-options --lib \
-      --target-dir "$build_dir" \
-      --out-dir "$output_dir"   \
-      -Zbuild-std=panic_abort,std \
-      --target aarch64-linux-ohos.json
-fi
+    args+=("--release")
+fi 
+
+echo "[RustLibBuilder] Running command: " CARGO_BUILD_RUSTFLAGS=\""${rustflags}"\" C_LINKER=\""$linker"\" cargo "${args[@]}"
+CARGO_BUILD_RUSTFLAGS="${rustflags}" C_LINKER="$linker" cargo "${args[@]}"
