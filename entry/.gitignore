@@ -2,3 +2,4 @@
 /node_modules
 /.cxx/
 /.rust/
+/bin/

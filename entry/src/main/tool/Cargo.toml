@@ -1,0 +1,16 @@
+[package]
+name = "ohos-build-tools"
+version = "0.1.0"
+authors = ["Chen Yunchuan <chenych11@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1"
+
+
+[[bin]]
+name = "linker_wrapper"
+path = "src/bin/linker-wrapper.rs"
+
